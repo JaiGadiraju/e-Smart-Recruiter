@@ -1,0 +1,266 @@
+from tkinter import *
+import os
+
+import sqlite3
+
+conn=sqlite3.connect('crsproject4.db')
+c=conn.cursor()
+ 
+creds = 'tempfile.temp' 
+
+global entry1
+global entry2
+global entry3
+global entry4
+global entry5
+
+def Inputs():
+    global uname
+    global rootB
+   
+    
+    rootB= Tk()
+    rootB.title('Enter your details:')
+    rootB.geometry("400x400")
+    
+    label1=Label(rootB,text=("Enter yor first name:"))
+    label1.grid(row=1,column=0)
+
+    label2=Label(rootB,text=("Enter yor last name:"))
+    label2.grid(row=2,column=0)
+
+    label3=Label(rootB,text=("Enter yor tenth percentage :"))
+    label3.grid(row=3,column=0)
+
+    label4=Label(rootB,text=("Enter yor inter percentage :"))
+    label4.grid(row=4,column=0)
+
+    label5=Label(rootB,text=("Enter yor preffered companies :"))
+    label5.grid(row=6,column=0)
+    
+    label6=Label(rootB,text=("Enter your Engineering percentage :"))
+    label6.grid(row=5,column=0)
+
+    entry1=Entry(rootB)
+    entry1.grid(row=1,column=5)
+    
+    entry2=Entry(rootB)
+    entry2.grid(row=2,column=5)
+    
+    entry3=Entry(rootB)
+    entry3.grid(row=3,column=5)
+    
+    entry4=Entry(rootB)
+    entry4.grid(row=4,column=5)
+    
+    entry5=Entry(rootB)
+    entry5.grid(row=6,column=5)
+    
+    entry6=Entry(rootB)
+    entry6.grid(row=5,column=5)
+    
+    button = Button(rootB, text='Click Me!!', command=Output) 
+    button.grid(row=8,column=3)
+    rootB.mainloop()
+    
+ 
+def Signup(): 
+    global pwordE 
+    global nameE
+    global roots
+ 
+    roots = Tk() 
+    roots.title('Signup')
+    roots.geometry("400x400")
+    credentials = Label(roots, text='Please Enter New Credidentials',font=('arial',40,'bold'),fg='steelblue').place(x=360,y=10) 
+     
+    nameL = Label(roots, text='New Username: ',font=('aldhabi',16)).place(x=400,y=110)
+    pwordL = Label(roots, text='New Password: ',font=('aldhabi',16)).place(x=400,y=150)
+     
+    nameE = Entry(roots)
+    pwordE = Entry(roots, show='*')
+    nameE.place(x=700,y=115)
+    pwordE.place(x=700,y=155) 
+    
+    signupButton = Button(roots, text='Signup', command=Login).place(x=600,y=200)
+ 
+    ar=Label(roots, text='Already registered? ',font=('aldhabi',10)).place(x=450,y=250)
+    ab=Button(roots, text='Click Here!', command=Login).place(x=590,y=245)
+    
+    roots.mainloop() 
+ 
+def Login():
+    global nameEL
+    global pwordEL 
+    global rootA
+ 
+    rootA = Tk()
+    rootA.title('Login') 
+ 
+    loginlabel = Label(rootA, text='Please Login',font=('arial',40,'bold'),fg='lightgreen').place(x=40,y=20)
+    
+    nameL = Label(rootA, text='Username: ')
+    pwordL = Label(rootA, text='Password2:')
+    nameL.place(x=20,y=100)
+    pwordL.place(x=20,y=130)
+    
+    nameEL = Entry(rootA)
+    pwordEL = Entry(rootA, show='*')
+    nameEL.place(x=100,y=100)
+    pwordEL.place(x=100,y=130)
+    
+    loginB = Button(rootA, text='Login', command=CheckLogin)
+    
+    loginB.place(x=40,y=160)
+    deluser.place(x=40,y=190)
+    
+    
+    rootA.mainloop()
+ 
+def CheckLogin():
+    
+    class Employee:
+        def __init__(self,first,last,tenpercent,interpercent,preffered_companies,e_percent,user_id,password):
+            self.first=first
+            self.last=last
+            self.tenpercent=tenpercent
+            self.interpercent=interpercent
+            self.preffered_companies=preffered_companies
+            self.user_id=user_id
+            self.password=password
+            self.e_percent=e_percent
+            
+    #c.execute('''CREATE TABLE table25 (
+     #    first text,
+      #   last text,
+       #  tenpercent integer,
+         #interpercent integer,
+        # e_percent integer,
+         #preffered_companies,
+         #user_id text,
+         #password text
+         
+         #)''')
+        
+    
+    
+
+    def insert_emp(emp):
+        with conn:
+            c.execute("INSERT INTO table25 VALUES('{}','{}','{}','{}','{}','{}','{}','{}')".format(emp.first,emp.last,emp.tenpercent,emp.interpercent,emp.preffered_companies,emp.e_percent,emp.user_id,emp.password))
+    
+    Inputs()
+    first1=entry1.get()
+    last1=entry2.get()
+    tenpercent1=entry3.get()
+    interpercent1=entry4.get()
+    e_percent1=entry6.get()
+    preffered_companies1=entry5.get()
+    user_id1=nameE.get()
+    password1=pwordE.get()
+    
+    emp1=Employee(first1,last1,tenpercent1,interpercent1,e_percent,preffered_companies1,user_id1,password1)
+
+    insert_emp(emp1)
+    
+    
+    def get_employees_by_user_id1(userid):
+        c.execute("SELECT * FROM table25 WHERE user_id=:user_id",{'user_id':userid})
+        return  c.fetchall()
+    
+    u=0
+    while(u<=100):
+        a1=get_employees_by_user_id1(u)
+        u=u+1
+        
+     
+    if nameEL.get() == a1[0][6] and pwordEL.get() == a1[0][7]: 
+        Inputs()
+    else:
+        r = Tk()
+        r.title('D:')
+        r.geometry('150x50')
+        rlbl = Label(r, text='\n[!] Invalid Login')
+        rlbl.pack()
+        r.mainloop()
+   
+
+    
+def Output():
+    
+    display=Text(master=rootB,height=10,width=30)
+    display.grid(column=1,row=10)
+    
+    
+    def get_employees_by_user_id(userid):
+        c.execute("SELECT * FROM table25 WHERE user_id=:user_id",{'user_id':userid})
+        return  c.fetchall() 
+   
+    al=get_employees_by_user_id(nameEL.get())
+         
+    if(len(al)==1):
+        if('google' in al[0][5]):
+            if(al[0][2]>90):
+                if(al[0][3]>85):
+                    if(al[0][4]>70):
+                        display.insert("You have been selected for the interview with Google")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+        if('amazon' in al[0][5]):
+            if(al[0][2]>85):
+                if(al[0][3]>80): 
+                    if(al[0][4]):
+                        display.insert("You have been selected for the interview with Amazon")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+                
+                
+        if('hp' in al[0][5]):
+            if(al[0][2]>85):
+                if(al[0][3]>80): 
+                    if(al[0][4]):
+                        display.insert("You have been selected for the interview with HP}")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+                
+        if('Wipro' in al[0][5]):
+            if(al[0][2]>85):
+                if(al[0][3]>80): 
+                    if(al[0][4]):
+                        display.insert("You have been selected for the interview with Wipro")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+                
+        if('Infosys' in al[0][5]):
+            if(al[0][2]>85):
+                if(al[0][3]>80): 
+                    if(al[0][4]):
+                        display.insert("You have been selected for the interview with Infosys")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+                
+        if('IBM' in al[0][5]):
+            if(al[0][2]>85):
+                if(al[0][3]>80): 
+                    if(al[0][4]):
+                        display.insert("You have been selected for the interview with IBM")
+                else:
+                    display.insert("You are not selected.")
+            else:
+                display.insert("You are not selected.")
+
+    rootB.mainloop()
+if os.path.isfile(creds):
+    Login()
+else: 
+    Signup()
